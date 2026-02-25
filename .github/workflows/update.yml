@@ -9,6 +9,10 @@ on:
         description: 'Dry run (show diff without publishing)'
         type: boolean
         default: false
+      force_publish:
+        description: 'Force publish even if rates unchanged (for initial release)'
+        type: boolean
+        default: false
 
 jobs:
   update:
@@ -30,7 +34,10 @@ jobs:
         run: |
           CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" data/eu-vat-rates.json)
           LATEST=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" /tmp/latest.json)
-          if [ "$CURRENT" = "$LATEST" ]; then
+          if [ "${{ github.event.inputs.force_publish }}" = "true" ]; then
+            echo "rates_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Force publish requested."
+          elif [ "$CURRENT" = "$LATEST" ]; then
             echo "rates_changed=false" >> "$GITHUB_OUTPUT"
             echo "No rate changes."
           else
