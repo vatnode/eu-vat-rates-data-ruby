@@ -1,0 +1,76 @@
+name: Update EU VAT Rates
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (show diff without publishing)'
+        type: boolean
+        default: false
+
+jobs:
+  update:
+    name: Fetch, bump & publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download latest VAT rates
+        run: |
+          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data/main/data/eu-vat-rates.json \
+            -o /tmp/latest.json
+
+      - name: Check for rate changes
+        id: diff
+        run: |
+          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" data/eu-vat-rates.json)
+          LATEST=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" /tmp/latest.json)
+          if [ "$CURRENT" = "$LATEST" ]; then
+            echo "rates_changed=false" >> "$GITHUB_OUTPUT"
+            echo "No rate changes."
+          else
+            echo "rates_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Rate changes detected."
+          fi
+
+      - name: Update bundled data
+        if: steps.diff.outputs.rates_changed == 'true'
+        run: cp /tmp/latest.json data/eu-vat-rates.json
+
+      - name: Set up Ruby
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Bump version and build gem
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          VERSION=$(date -u +%Y.%-m.%-d)
+          sed -i "s/VERSION = .*/VERSION = \"${VERSION}\"/" lib/eu_vat_rates_data/version.rb
+          gem build eu_vat_rates_data.gemspec
+
+      - name: Publish to RubyGems
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          mkdir -p ~/.gem
+          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.gem/credentials
+          chmod 600 ~/.gem/credentials
+          gem push *.gem
+
+      - name: Commit, tag and push
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          VERSION=$(date -u +%Y.%-m.%-d)
+          git config user.name "vatnode-bot"
+          git config user.email "bot@vatnode.dev"
+          git add data/eu-vat-rates.json lib/eu_vat_rates_data/version.rb
+          git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
+          git tag "v${VERSION}"
+          git push && git push --tags
