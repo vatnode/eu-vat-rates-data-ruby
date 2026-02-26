@@ -26,7 +26,7 @@ jobs:
 
       - name: Download latest VAT rates
         run: |
-          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data-js/main/data/eu-vat-rates-data.json \
+          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data/main/data/eu-vat-rates-data.json \
             -o /tmp/latest.json
 
       - name: Check for rate changes

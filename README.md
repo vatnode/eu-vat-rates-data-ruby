@@ -64,7 +64,7 @@ puts EuVatRatesData.data_version  # e.g. "2026-02-25"
 
 Rates are fetched from the **European Commission Taxes in Europe Database (TEDB)**:
 
-- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data-js**
+- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data**
 - Refreshed: **daily at 08:00 UTC**
 - Published to RubyGems only when actual rates change
 
