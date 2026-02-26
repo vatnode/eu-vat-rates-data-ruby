@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.summary     = "EU VAT rates for all 27 member states + UK"
   spec.description = "EU VAT rates for all 27 member states + UK. Updated daily from EC TEDB, published automatically when rates change."
-  spec.homepage    = "https://github.com/vatnode/eu-vat-rates-ruby"
+  spec.homepage    = "https://github.com/vatnode/eu-vat-rates-data-ruby"
   spec.license     = "MIT"
 
   spec.required_ruby_version = ">= 3.0"
