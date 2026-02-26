@@ -26,13 +26,13 @@ jobs:
 
       - name: Download latest VAT rates
         run: |
-          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data-js/main/data/eu-vat-rates.json \
+          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data-js/main/data/eu-vat-rates-data.json \
             -o /tmp/latest.json
 
       - name: Check for rate changes
         id: diff
         run: |
-          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" data/eu-vat-rates.json)
+          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" data/eu-vat-rates-data.json)
           LATEST=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" /tmp/latest.json)
           if [ "${{ github.event.inputs.force_publish }}" = "true" ]; then
             echo "rates_changed=true" >> "$GITHUB_OUTPUT"
@@ -47,7 +47,7 @@ jobs:
 
       - name: Update bundled data
         if: steps.diff.outputs.rates_changed == 'true'
-        run: cp /tmp/latest.json data/eu-vat-rates.json
+        run: cp /tmp/latest.json data/eu-vat-rates-data.json
 
       - name: Set up Ruby
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
@@ -77,6 +77,6 @@ jobs:
           VERSION=$(date -u +%Y.%-m.%-d)
           git config user.name "vatnode-bot"
           git config user.email "bot@vatnode.dev"
-          git add data/eu-vat-rates.json lib/eu_vat_rates_data/version.rb
+          git add data/eu-vat-rates-data.json lib/eu_vat_rates_data/version.rb
           git diff --staged --quiet || git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
           git push
