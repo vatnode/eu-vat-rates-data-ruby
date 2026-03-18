@@ -30,6 +30,12 @@ class SmokeTest < Minitest::Test
     end
   end
 
+  def test_all_vat_names_non_empty
+    EuVatRatesData.all_rates.each do |code, rate|
+      assert rate['vat_name'].is_a?(String) && !rate['vat_name'].empty?, "#{code}: vat_name is empty"
+    end
+  end
+
   def test_data_version_format
     assert_match(/\A\d{4}-\d{2}-\d{2}\z/, EuVatRatesData.data_version)
   end
