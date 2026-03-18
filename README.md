@@ -4,12 +4,13 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-ruby?path=data%2Feu-vat-rates-data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-ruby/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-EU VAT rates for all **27 EU member states** plus the **United Kingdom**, sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html). Checked daily, published automatically when rates change.
+VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html) and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
+- `eu_member` flag on every country — `true` for EU-27, `false` for non-EU
 - No dependencies — pure Ruby 3.0+
 - Data bundled in the gem — works offline, no network calls
-- Checked daily via GitHub Actions, new version published only when rates change
+- EU rates checked daily via GitHub Actions, new version published only when rates change
 
 Also available in: [JavaScript/TypeScript (npm)](https://www.npmjs.com/package/eu-vat-rates-data) · [Python (PyPI)](https://pypi.org/project/eu-vat-rates-data/) · [PHP (Packagist)](https://packagist.org/packages/vatnode/eu-vat-rates-data) · [Go](https://pkg.go.dev/github.com/vatnode/eu-vat-rates-data-go)
 
@@ -35,6 +36,7 @@ fi = EuVatRatesData.get_rate("FI")
 # {
 #   "country"       => "Finland",
 #   "currency"      => "EUR",
+#   "eu_member"     => true,
 #   "standard"      => 25.5,
 #   "reduced"       => [10.0, 13.5],
 #   "super_reduced" => nil,
@@ -44,37 +46,39 @@ fi = EuVatRatesData.get_rate("FI")
 # Just the standard rate
 EuVatRatesData.get_standard_rate("DE")  # => 19.0
 
-# Type guard
+# EU membership check — false for non-EU countries (GB, NO, CH, ...)
 if EuVatRatesData.eu_member?(user_input)
-  rate = EuVatRatesData.get_rate(user_input)  # always non-nil here
+  rate = EuVatRatesData.get_rate(user_input)
 end
 
-# All 28 countries at once
+# All 44 countries at once
 EuVatRatesData.all_rates.each do |code, rate|
   puts "#{code}: #{rate['standard']}%"
 end
 
-# When were these rates last fetched?
-puts EuVatRatesData.data_version  # e.g. "2026-02-25"
+# When were EU rates last fetched?
+puts EuVatRatesData.data_version  # e.g. "2026-03-18"
 ```
 
 ---
 
 ## Data source & update frequency
 
-Rates are fetched from the **European Commission Taxes in Europe Database (TEDB)**:
-
-- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data**
-- Refreshed: **daily at 08:00 UTC**
+- EU-27 rates: **European Commission TEDB**, refreshed **daily at 08:00 UTC**
+- Non-EU rates: maintained manually, updated on official rate changes
 - Published to RubyGems only when actual rates change
 
 ---
 
 ## Covered countries
 
-EU-27 member states + United Kingdom (28 countries total):
+**EU-27** (daily auto-updates via EC TEDB):
 
-`AT` `BE` `BG` `CY` `CZ` `DE` `DK` `EE` `ES` `FI` `FR` `GB` `GR` `HR` `HU` `IE` `IT` `LT` `LU` `LV` `MT` `NL` `PL` `PT` `RO` `SE` `SI` `SK`
+`AT` `BE` `BG` `CY` `CZ` `DE` `DK` `EE` `ES` `FI` `FR` `GR` `HR` `HU` `IE` `IT` `LT` `LU` `LV` `MT` `NL` `PL` `PT` `RO` `SE` `SI` `SK`
+
+**Non-EU Europe** (manually maintained):
+
+`AD` `AL` `BA` `CH` `GB` `GE` `IS` `LI` `MC` `MD` `ME` `MK` `NO` `RS` `TR` `UA` `XK`
 
 ---
 
