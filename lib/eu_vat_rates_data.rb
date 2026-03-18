@@ -18,7 +18,7 @@ require_relative "eu_vat_rates_data/version"
 #   EuVatRatesData.eu_member?("FR")         # => true
 #   EuVatRatesData.data_version             # => "2026-03-18"
 module EuVatRatesData
-  DATA_FILE = File.expand_path("../../data/eu-vat-rates-data.json", __dir__)
+  DATA_FILE = File.expand_path("../data/eu-vat-rates-data.json", __dir__)
 
   @dataset = nil
 
