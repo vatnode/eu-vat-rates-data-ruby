@@ -60,7 +60,15 @@ module EuVatRatesData
     rate ? rate["eu_member"] == true : false
   end
 
-  # Return the ISO 8601 date when EU data was last fetched from EC TEDB.
+  # Return true if the country code is present in the dataset (all 44 countries).
+  # Use eu_member? to check EU membership specifically.
+  # @param country_code [String] ISO 3166-1 alpha-2 code
+  # @return [Boolean]
+  def self.has_rate?(country_code)
+    rates.key?(country_code.upcase)
+  end
+
+    # Return the ISO 8601 date when EU data was last fetched from EC TEDB.
   # @return [String] e.g. "2026-03-18"
   def self.data_version
     dataset["version"]
