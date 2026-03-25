@@ -53,6 +53,11 @@ if EuVatRatesData.eu_member?(user_input)
   rate = EuVatRatesData.get_rate(user_input)
 end
 
+# Dataset membership check (all 44 countries)
+if EuVatRatesData.has_rate?(user_input)
+  rate = EuVatRatesData.get_rate(user_input)
+end
+
 # All 44 countries at once
 EuVatRatesData.all_rates.each do |code, rate|
   puts "#{code}: #{rate['standard']}%"
