@@ -9,6 +9,7 @@ VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `true` for EU-27, `false` for non-EU
 - `vat_name` — official name of the VAT tax in the country's primary official language
+- `vat_abbr` — short abbreviation used locally (e.g. "ALV", "MwSt", "TVA")
 - No dependencies — pure Ruby 3.0+
 - Data bundled in the gem — works offline, no network calls
 - EU rates checked daily via GitHub Actions, new version published only when rates change
@@ -39,6 +40,7 @@ fi = EuVatRatesData.get_rate("FI")
 #   "currency"      => "EUR",
 #   "eu_member"     => true,
 #   "vat_name"      => "Arvonlisävero",
+#   "vat_abbr"      => "ALV",
 #   "standard"      => 25.5,
 #   "reduced"       => [10.0, 13.5],
 #   "super_reduced" => nil,
@@ -64,14 +66,14 @@ EuVatRatesData.all_rates.each do |code, rate|
 end
 
 # When were EU rates last fetched?
-puts EuVatRatesData.data_version  # e.g. "2026-03-18"
+puts EuVatRatesData.data_version  # e.g. "2026-03-27"
 ```
 
 ---
 
 ## Data source & update frequency
 
-- EU-27 rates: **European Commission TEDB**, refreshed **daily at 08:00 UTC**
+- EU-27 rates: **European Commission TEDB**, refreshed **daily at 07:00 UTC**
 - Non-EU rates: maintained manually, updated on official rate changes
 - Published to RubyGems only when actual rates change
 
