@@ -2,12 +2,12 @@ require_relative "lib/eu_vat_rates_data/version"
 
 Gem::Specification.new do |spec|
   spec.name        = "eu_vat_rates_data"
-  spec.version     = EuVatRatesData::VERSION
+  spec.version      = "2026.3.30"
   spec.authors     = ["Iurii Rogulia"]
   spec.email       = ["iurii@rogulia.fi"]
 
-  spec.summary     = "VAT rates for 44 European countries — EU-27 plus Norway, Switzerland, UK, and more. Daily auto-updates from EC TEDB."
-  spec.description = "VAT rates (standard, reduced, super-reduced, parking) for 44 European countries — EU-27 plus Norway, Switzerland, UK, and more. Updated daily from the official European Commission TEDB. Includes eu_member flag. Useful for billing, invoicing, e-commerce, fintech, and VAT MOSS compliance."
+  spec.summary      = "VAT rates for 44 European countries — EU-27 plus Norway, Switzerland, UK, and more."
+  spec.description  = "VAT rates (standard, reduced, super-reduced, parking) for 44 European countries — EU-27 plus Norway, Switzerland, UK, and more. Includes eu_member flag, local VAT name and abbreviation. Useful for billing, invoicing, e-commerce, fintech, and VAT compliance."
   spec.homepage    = "https://github.com/vatnode/eu-vat-rates-data-ruby"
   spec.license     = "MIT"
 
