@@ -58,15 +58,15 @@ jobs:
       - name: Bump version and build gem
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
         run: |
-          VERSION=$(date -u +%Y.%-m.%-d)
-          # Check if this exact version already exists on RubyGems
-          if gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}"; then
-            COUNT=1
-            while gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}.${COUNT}"; do
-              COUNT=$((COUNT + 1))
-            done
-            VERSION="${VERSION}.${COUNT}"
-          fi
+          YEAR=$(date -u +%Y)
+          MONTH=$(date -u +%-m)
+          DAY=$(date -u +%-d)
+          VERSION="${YEAR}.${MONTH}.${DAY}"
+          # If this version already exists on RubyGems, increment the day until we find a free slot
+          while gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}[,)]"; do
+            DAY=$((DAY + 1))
+            VERSION="${YEAR}.${MONTH}.${DAY}"
+          done
           echo "Publishing version: $VERSION"
           sed -i "s/VERSION = .*/VERSION = \"${VERSION}\"/" lib/eu_vat_rates_data/version.rb
           gem build eu_vat_rates_data.gemspec
