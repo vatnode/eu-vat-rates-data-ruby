@@ -79,6 +79,23 @@ puts EuVatRatesData.data_version  # e.g. "2026-03-27"
 
 ---
 
+
+## Keeping rates current
+
+Rates are bundled at install time. A new package version is published automatically whenever rates change — but your installed version will not update itself.
+
+**Recommended:** add [Renovate](https://renovatebot.com) or [Dependabot](https://docs.github.com/en/code-security/dependabot) to your repo. They detect new versions and open a PR automatically whenever rates change — no manual update commands needed.
+
+**Need real-time accuracy?** Fetch the always-current JSON directly:
+
+```
+https://cdn.jsdelivr.net/gh/vatnode/eu-vat-rates-data@main/data/eu-vat-rates-data.json
+```
+
+No package needed — parse it with a single `fetch()` / `http.get()` / `file_get_contents()` call and cache locally.
+
+---
+
 ## Covered countries
 
 **EU-27** (daily auto-updates via EC TEDB):
