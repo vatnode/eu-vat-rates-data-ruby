@@ -59,6 +59,15 @@ jobs:
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
         run: |
           VERSION=$(date -u +%Y.%-m.%-d)
+          # Check if this exact version already exists on RubyGems
+          if gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}"; then
+            COUNT=1
+            while gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}.${COUNT}"; do
+              COUNT=$((COUNT + 1))
+            done
+            VERSION="${VERSION}.${COUNT}"
+          fi
+          echo "Publishing version: $VERSION"
           sed -i "s/VERSION = .*/VERSION = \"${VERSION}\"/" lib/eu_vat_rates_data/version.rb
           gem build eu_vat_rates_data.gemspec
 
@@ -74,7 +83,7 @@ jobs:
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
         run: |
           DATE=$(date -u +%Y-%m-%d)
-          VERSION=$(date -u +%Y.%-m.%-d)
+          VERSION=$(ruby -r./lib/eu_vat_rates_data/version -e 'puts EuVatRatesData::VERSION')
           git config user.name "vatnode-bot"
           git config user.email "bot@vatnode.dev"
           git add data/eu-vat-rates-data.json lib/eu_vat_rates_data/version.rb
