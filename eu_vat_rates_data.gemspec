@@ -2,7 +2,7 @@ require_relative "lib/eu_vat_rates_data/version"
 
 Gem::Specification.new do |spec|
   spec.name        = "eu_vat_rates_data"
-  spec.version      = "2026.3.30"
+  spec.version      = EuVatRatesData::VERSION
   spec.authors     = ["Iurii Rogulia"]
   spec.email       = ["iurii@rogulia.fi"]
 
