@@ -68,7 +68,20 @@ module EuVatRatesData
     rates.key?(country_code.upcase)
   end
 
-    # Return the ISO 8601 date when EU data was last fetched from EC TEDB.
+  # Return true if vat_id matches the expected format for its country.
+  # Input must include the country code prefix (e.g. "ATU12345678").
+  # Returns false when the country has no standardised format or the ID does not match.
+  # Note: Greece uses the "EL" prefix, not "GR".
+  # @param vat_id [String] VAT number string including country code prefix
+  # @return [Boolean]
+  def self.valid_format?(vat_id)
+    code = vat_id[0, 2].upcase
+    rate = get_rate(code)
+    return false unless rate && rate["pattern"]
+    !!(vat_id.upcase =~ /\A#{rate["pattern"]}\z/)
+  end
+
+  # Return the ISO 8601 date when EU data was last fetched from EC TEDB.
   # @return [String] e.g. "2026-03-18"
   def self.data_version
     dataset["version"]

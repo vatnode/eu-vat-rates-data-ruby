@@ -10,6 +10,8 @@ VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, 
 - `eu_member` flag on every country — `true` for EU-27, `false` for non-EU
 - `vat_name` — official name of the VAT tax in the country's primary official language
 - `vat_abbr` — short abbreviation used locally (e.g. "ALV", "MwSt", "TVA")
+- **`format` — human-readable VAT number format (e.g. `"ATU + 8 digits"`)** — unique to this package
+- **`pattern` — regex for VAT number validation + built-in `valid_format?()` — free, no API key needed** — unique to this package
 - No dependencies — pure Ruby 3.0+
 - Data bundled in the gem — works offline, no network calls
 - EU rates checked daily via GitHub Actions, new version published only when rates change
@@ -67,6 +69,16 @@ end
 
 # When were EU rates last fetched?
 puts EuVatRatesData.data_version  # e.g. "2026-03-27"
+
+# VAT number format validation — no API key, no network call
+EuVatRatesData.valid_format?("ATU12345678")  # => true
+EuVatRatesData.valid_format?("DE123456789")  # => true
+EuVatRatesData.valid_format?("INVALID")      # => false
+
+# Access format metadata directly
+at = EuVatRatesData.get_rate("AT")
+puts at["format"]   # "ATU + 8 digits"
+puts at["pattern"]  # "^ATU\\d{8}$"
 ```
 
 ---
