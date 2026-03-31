@@ -79,6 +79,11 @@ EuVatRatesData.valid_format?("INVALID")      # => false
 at = EuVatRatesData.get_rate("AT")
 puts at["format"]   # "ATU + 8 digits"
 puts at["pattern"]  # "^ATU\\d{8}$"
+
+# Flag emoji from a 2-letter country code — no lookup table, computed from regional indicator symbols
+EuVatRatesData.flag("FI")  # => "🇫🇮"
+EuVatRatesData.flag("DE")  # => "🇩🇪"
+EuVatRatesData.flag("XX")  # => "" (empty string for unknown/invalid codes)
 ```
 
 ---
