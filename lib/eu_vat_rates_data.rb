@@ -17,6 +17,7 @@ require_relative "eu_vat_rates_data/version"
 #   EuVatRatesData.eu_member?("NO")         # => false
 #   EuVatRatesData.eu_member?("FR")         # => true
 #   EuVatRatesData.data_version             # => "2026-03-18"
+#   EuVatRatesData.flag("FI")              # => "🇫🇮"
 module EuVatRatesData
   DATA_FILE = File.expand_path("../data/eu-vat-rates-data.json", __dir__)
 
@@ -24,6 +25,7 @@ module EuVatRatesData
 
   def self.dataset
     @dataset ||= JSON.parse(File.read(DATA_FILE, encoding: "utf-8"))
+  end
 
   def self.rates
     dataset["rates"]
@@ -85,11 +87,10 @@ module EuVatRatesData
   def self.data_version
     dataset["version"]
   end
-end
 
   # Return the flag emoji for a 2-letter ISO 3166-1 alpha-2 country code.
   # Computed from regional indicator symbols — no lookup table needed.
-  # Returns an empty string if the input is not exactly 2 letters.
+  # Returns an empty string if the input is not exactly 2 ASCII letters.
   #
   # @param country_code [String] ISO 3166-1 alpha-2 code (e.g. "FI", "DE")
   # @return [String] flag emoji (e.g. "🇫🇮"), or "" if invalid
