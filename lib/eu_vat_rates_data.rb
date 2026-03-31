@@ -24,7 +24,6 @@ module EuVatRatesData
 
   def self.dataset
     @dataset ||= JSON.parse(File.read(DATA_FILE, encoding: "utf-8"))
-  end
 
   def self.rates
     dataset["rates"]
@@ -85,5 +84,24 @@ module EuVatRatesData
   # @return [String] e.g. "2026-03-18"
   def self.data_version
     dataset["version"]
+  end
+end
+
+  # Return the flag emoji for a 2-letter ISO 3166-1 alpha-2 country code.
+  # Computed from regional indicator symbols — no lookup table needed.
+  # Returns an empty string if the input is not exactly 2 letters.
+  #
+  # @param country_code [String] ISO 3166-1 alpha-2 code (e.g. "FI", "DE")
+  # @return [String] flag emoji (e.g. "🇫🇮"), or "" if invalid
+  #
+  # @example
+  #   EuVatRatesData.flag("FI")  # => "🇫🇮"
+  #   EuVatRatesData.flag("DE")  # => "🇩🇪"
+  #   EuVatRatesData.flag("GB")  # => "🇬🇧"
+  def self.flag(country_code)
+    code = country_code.upcase
+    return "" unless code.length == 2 && code.match?(/\A[A-Z]{2}\z/)
+    base = 0x1F1E6
+    [base + code.ord - 65, base + code[-1].ord - 65].pack("U*")
   end
 end
