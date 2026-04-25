@@ -63,7 +63,7 @@ jobs:
           DAY=$(date -u +%-d)
           VERSION="${YEAR}.${MONTH}.${DAY}"
           # If this version already exists on RubyGems, increment the day until we find a free slot
-          while gem list -ra "^eu_vat_rates_data$" --remote 2>/dev/null | grep -q "(${VERSION}[,)]"; do
+          while curl -sf "https://rubygems.org/api/v1/versions/eu_vat_rates_data.json" 2>/dev/null | grep -q "\"number\":\"${VERSION}\""; do
             DAY=$((DAY + 1))
             VERSION="${YEAR}.${MONTH}.${DAY}"
           done
