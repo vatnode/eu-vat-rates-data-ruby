@@ -4,7 +4,7 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-ruby?path=data%2Feu-vat-rates-data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-ruby/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the European Commission TEDB and checked daily. Non-EU rates maintained manually.
+VAT rates for **45 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the European Commission TEDB and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `true` for EU-27, `false` for non-EU
@@ -57,12 +57,12 @@ if EuVatRatesData.eu_member?(user_input)
   rate = EuVatRatesData.get_rate(user_input)
 end
 
-# Dataset membership check (all 44 countries)
+# Dataset membership check (all 45 countries)
 if EuVatRatesData.has_rate?(user_input)
   rate = EuVatRatesData.get_rate(user_input)
 end
 
-# All 44 countries at once
+# All 45 countries at once
 EuVatRatesData.all_rates.each do |code, rate|
   puts "#{code}: #{rate['standard']}%"
 end
