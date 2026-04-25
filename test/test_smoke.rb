@@ -14,8 +14,8 @@ class SmokeTest < Minitest::Test
     refute EuVatRatesData.eu_member?('NO')
   end
 
-  def test_dataset_has_44_countries
-    assert_equal 44, EuVatRatesData.all_rates.length
+  def test_dataset_has_45_countries
+    assert_equal 45, EuVatRatesData.all_rates.length
   end
 
   def test_all_standard_rates_positive
