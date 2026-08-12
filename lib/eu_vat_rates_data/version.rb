@@ -1,3 +1,3 @@
 module EuVatRatesData
-  VERSION = "2026.7.1"
+  VERSION = "2026.8.12"
 end
