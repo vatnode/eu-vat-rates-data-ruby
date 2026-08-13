@@ -24,7 +24,7 @@ Also available in: [JavaScript/TypeScript (npm)](https://www.npmjs.com/package/e
 
 This package gives you VAT **rates** and **format checks** for free, offline, in your code. It does **not** call VIES — `valid_format?()` only checks the shape of a VAT number, not whether it actually exists.
 
-For **live VIES validation** — confirming a VAT ID is real, pulling the registered company name and address, and getting the VIES consultation number as your reference for the check — there's **[vatnode](https://vatnode.dev)**:
+For **live VIES validation** — confirming a VAT ID is real, pulling the registered company name and address, and getting the VIES consultation number as your reference for the check — there's **[vatnode](https://vatnode.dev?ref=rates-readme-rb)**:
 
 - Live VIES validation, with national-database fallback when VIES is down
 - Registered company name, address, registration date
@@ -149,22 +149,9 @@ No package needed — parse it with a single `fetch()` / `http.get()` / `file_ge
 
 ---
 
-## Need to validate VAT numbers?
-
-This package provides **VAT rates** only. If you also need to **validate EU VAT numbers** against the official VIES database — confirming a business is VAT-registered — check out [vatnode.dev](https://vatnode.dev), a simple REST API with a free tier.
-
-```bash
-curl https://api.vatnode.dev/v1/vat/FI17156132 \
-  -H "Authorization: Bearer vat_live_..."
-# → { "valid": true, "companyName": "Suomen Pehmeä Ikkuna Oy" }
-```
-
----
-
 ## Changelog
 
-### 2026-04-25
-- **fix:** Corrected Sweden (SE) VAT number regex — was `^SE\d{12}$`, now correctly requires the mandatory `01` suffix: `^SE\d{10}01$`.
+See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
