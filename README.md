@@ -110,6 +110,43 @@ EuVatRatesData.flag("XX")  # => "" (empty string for unknown/invalid codes)
 
 ---
 
+## Example: charging VAT on an invoice
+
+Rates on their own rarely answer the question you actually have, which is what
+to put on the invoice. Two rules cover most of it: charge the buyer's domestic
+rate, unless the sale is cross-border B2B inside the EU, where the reverse
+charge applies and you invoice 0%.
+
+```ruby
+# Money in minor units (cents). Never floats.
+def invoice_total(net_cents, seller_country, buyer_country, buyer_vat_id = nil)
+  cross_border_b2b = buyer_country != seller_country &&
+                     !buyer_vat_id.nil? &&
+                     EuVatRatesData.valid_format?(buyer_vat_id)
+
+  return { vat_cents: 0, total_cents: net_cents, reverse_charge: true } if cross_border_b2b
+
+  rate = EuVatRatesData.get_standard_rate(buyer_country)
+  vat_cents = (net_cents * rate / 100.0).round
+
+  { vat_cents: vat_cents, total_cents: net_cents + vat_cents, reverse_charge: false }
+end
+
+# Domestic sale in Finland — 25.5%
+invoice_total(10_000, 'FI', 'FI')
+# => { vat_cents: 2550, total_cents: 12550, reverse_charge: false }
+
+# Finnish seller, German business buyer — reverse charge
+invoice_total(10_000, 'FI', 'DE', 'DE123456789')
+# => { vat_cents: 0, total_cents: 10000, reverse_charge: true }
+```
+
+`valid_format?` only checks the shape of the number. Applying the reverse charge
+requires the buyer to actually be VAT-registered, which is a VIES lookup — see
+above.
+
+---
+
 ## Data source & update frequency
 
 How the daily check works, and what changed when: [vatnode.dev/data](https://vatnode.dev/data?ref=rates-readme-rb).
