@@ -77,6 +77,9 @@ module EuVatRatesData
   # @return [Boolean]
   def self.valid_format?(vat_id)
     code = vat_id[0, 2].upcase
+    # Greek VAT numbers carry the VIES prefix EL, while the dataset keys Greece
+    # under its ISO code GR.
+    code = "GR" if code == "EL"
     rate = get_rate(code)
     return false unless rate && rate["pattern"]
     !!(vat_id.upcase =~ /\A#{rate["pattern"]}\z/)

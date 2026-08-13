@@ -43,4 +43,23 @@ class SmokeTest < Minitest::Test
   def test_unknown_country_returns_nil
     assert_nil EuVatRatesData.get_rate('XX')
   end
+
+  def test_valid_format_accepts_well_formed_ids
+    assert EuVatRatesData.valid_format?('ATU12345678')
+    assert EuVatRatesData.valid_format?('DE123456789')
+    assert EuVatRatesData.valid_format?('atu12345678')
+  end
+
+  def test_valid_format_rejects_malformed_input
+    refute EuVatRatesData.valid_format?('')
+    refute EuVatRatesData.valid_format?('INVALID')
+    refute EuVatRatesData.valid_format?('DE12')
+  end
+
+  # Greek VAT numbers carry the VIES prefix EL while the dataset keys Greece as GR.
+  def test_valid_format_handles_greek_el_prefix
+    assert EuVatRatesData.valid_format?('EL123456789')
+    assert EuVatRatesData.valid_format?('el123456789')
+    refute EuVatRatesData.valid_format?('EL12345678')
+  end
 end
