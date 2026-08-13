@@ -38,7 +38,7 @@ curl https://api.vatnode.dev/v1/vat/IE6388047V \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-[**Get a free API key →**](https://vatnode.dev/login?ref=rates-readme-rb)
+[**See what the API adds →**](https://vatnode.dev/vat-rates?ref=rates-readme-rb#beyond-rates) · [Get a free API key](https://vatnode.dev/login?ref=rates-readme-rb)
 
 ---
 
