@@ -1,7 +1,7 @@
 require "json"
 require_relative "eu_vat_rates_data/version"
 
-# VAT rates for 44 European countries (EU-27 + 17 non-EU).
+# VAT rates for 45 European jurisdictions (EU-27 + 18 non-EU/special VAT jurisdictions).
 #
 # EU rates sourced from the European Commission TEDB (Taxes in Europe Database),
 # checked daily. Non-EU rates maintained manually.
@@ -46,7 +46,7 @@ module EuVatRatesData
     rate&.fetch("standard")
   end
 
-  # Return all 44 country rate hashes keyed by ISO country code.
+  # Return all 45 jurisdiction rate hashes keyed by country code.
   # @return [Hash{String => Hash}]
   def self.all_rates
     rates.dup
@@ -61,7 +61,7 @@ module EuVatRatesData
     rate ? rate["eu_member"] == true : false
   end
 
-  # Return true if the country code is present in the dataset (all 44 countries).
+  # Return true if the country code is present in the dataset (all 45 jurisdictions).
   # Use eu_member? to check EU membership specifically.
   # @param country_code [String] ISO 3166-1 alpha-2 code
   # @return [Boolean]

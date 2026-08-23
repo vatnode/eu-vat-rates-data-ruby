@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Iurii Rogulia"]
   spec.email       = ["iurii@rogulia.fi"]
 
-  spec.summary      = "VAT rates for 45 European countries — EU-27 plus Norway, Switzerland, UK, and more. From vatnode.dev."
-  spec.description  = "VAT rates (standard, reduced, super-reduced, parking) for 45 European countries — EU-27 plus Norway, Switzerland, UK, and more. Includes eu_member flag, local VAT name and abbreviation. Useful for billing, invoicing, e-commerce, fintech, and VAT compliance. From vatnode.dev — live VIES validation via API."
+  spec.summary      = "Official-source European VAT rates for 45 jurisdictions"
+  spec.description  = "Daily-checked European VAT rates with standard and reduced rate types, offline access, local VAT metadata, and VAT number format validation."
   spec.homepage    = "https://vatnode.dev/vat-rates?ref=rates-rubygems"
   spec.license     = "MIT"
 
@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
     "bug_tracker_uri"   => "#{repo}/issues",
     "changelog_uri"     => "#{repo}/blob/main/CHANGELOG.md",
     "documentation_uri" => "#{repo}#readme",
+    "canonical_data_uri" => "https://github.com/vatnode/eu-vat-rates-data",
   }
 
   spec.files = Dir["lib/**/*", "data/**/*", "README.md", "LICENSE"]
