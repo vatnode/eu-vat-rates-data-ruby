@@ -149,7 +149,7 @@ invoice_total(10_000, 'DE', true)
 
 ## Identifier names
 
-`identifiers` holds names, never numbers: `registry_authority_name`, `registry_name`, `registry_code_name`, `tax_id_name` and `vat_id_name` — the company registrar, the company register, the register number, the business tax number and the VAT identification number. Each is keyed by ISO 639-1 language (every official language, plus `en`) with `{ name, abbr }` per language; for Finland `registry_code_name` is `{ fi: { name: "Y-tunnus" }, sv: { name: "FO-nummer" }, en: { name: "Business ID" } }` (abbr omitted here). `null` means no official name could be confirmed.
+`identifiers` holds names, never numbers: `registry_authority_name`, `registry_name`, `registry_code_name`, `tax_id_name` and `vat_id_name` — the company registrar, the company register, the register number, the business tax number and the VAT identification number. Each is keyed by ISO 639-1 language (every official language, plus `en`) with the name as the value; for Finland `registry_code_name` is `{ fi: "Y-tunnus", sv: "FO-nummer", en: "Business ID" }`. `null` means no official name could be confirmed.
 
 ---
 
